@@ -116,6 +116,7 @@ All tools are read-only. List endpoints accept `limit` (default 200, capped at
 - `rucio_list_parent_dids` — parents of a DID (reverse lookup)
 - `rucio_get_metadata` — DID metadata (`plugin`: `DID_COLUMN`, `JSON`, `ALL`)
 - `rucio_list_did_rules` — rules attached to a specific DID
+- `rucio_list_did_rule_history` — full rule history of a DID, including deleted rules
 
 ### Replicas
 
