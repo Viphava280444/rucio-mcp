@@ -53,6 +53,10 @@ class FakeClient:
         self.calls.append(("get_replication_rule", kwargs))
         return {"id": kwargs["rule_id"]}
 
+    def list_replication_rule_full_history(self, **kwargs):
+        self.calls.append(("list_replication_rule_full_history", kwargs))
+        return iter([{"rule_id": "rule-old-1", "account": "transfer_ops"}])
+
 
 def test_ping_and_whoami() -> None:
     client = FakeClient()
@@ -128,3 +132,16 @@ def test_rule_methods() -> None:
 
     assert out1["count"] == 1
     assert out2["data"]["id"] == "rule-1"
+
+
+def test_list_did_rule_history() -> None:
+    client = FakeClient()
+    svc = RucioService(client_factory=lambda: client)
+
+    out = svc.list_did_rule_history(scope="cms", name="dataset", limit=5)
+
+    assert out["count"] == 1
+    assert out["items"][0]["rule_id"] == "rule-old-1"
+    method, kwargs = client.calls[-1]
+    assert method == "list_replication_rule_full_history"
+    assert kwargs == {"scope": "cms", "name": "dataset"}

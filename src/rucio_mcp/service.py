@@ -192,6 +192,12 @@ class RucioService:
         items, truncated = _collect(cursor, limit)
         return _ok_items(items, truncated)
 
+    def list_did_rule_history(self, scope: str, name: str, limit: int = 200) -> dict[str, Any]:
+        limit = _clamp_limit(limit)
+        cursor = self._client().list_replication_rule_full_history(scope=scope, name=name)
+        items, truncated = _collect(cursor, limit)
+        return _ok_items(items, truncated)
+
     # ── RSE operational data ──────────────────────────────────────
 
     def get_rse_usage(

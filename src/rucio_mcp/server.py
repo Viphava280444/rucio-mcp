@@ -208,6 +208,17 @@ def rucio_list_did_rules(scope: str, name: str, limit: int = 200) -> dict[str, A
     return service.list_did_rules(scope=scope, name=name, limit=limit)
 
 
+@mcp.tool()
+def rucio_list_did_rule_history(scope: str, name: str, limit: int = 200) -> dict[str, Any]:
+    """List the full rule history of a DID, including rules that no longer exist.
+
+    Complements `rucio_list_did_rules` (current rules only): each history entry
+    carries the rule id, the owning account, the RSE expression and timestamps,
+    so you can see when past rules were created and deleted and who owned them.
+    """
+    return service.list_did_rule_history(scope=scope, name=name, limit=limit)
+
+
 # ── RSE operational data ──────────────────────────────────────────────
 
 
