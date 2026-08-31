@@ -14,7 +14,11 @@ logger = logging.getLogger(__name__)
 
 _host = os.environ.get("RUCIO_MCP_HOST", "0.0.0.0")
 _port = int(os.environ.get("RUCIO_MCP_PORT", "8000"))
-mcp = FastMCP("rucio-mcp", host=_host, port=_port)
+# stateless_http: a stateful FastMCP retains every session that is never
+# DELETEd (~60-120 KiB each). Behind a gateway whose health checks open
+# a session twice a minute, that leak OOM-killed the server roughly
+# every 6 days at a 1 GiB limit. Nothing here needs per-session state.
+mcp = FastMCP("rucio-mcp", host=_host, port=_port, stateless_http=True)
 service = RucioService(client_factory=create_rucio_client)
 
 
